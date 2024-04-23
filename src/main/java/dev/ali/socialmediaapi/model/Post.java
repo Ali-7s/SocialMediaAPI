@@ -18,7 +18,7 @@ public class Post {
     private Long id;
     private String title;
     private String content;
-    private final Date createdAt = new Date();
+    private Date createdAt = new Date();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
@@ -28,6 +28,7 @@ public class Post {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.createdAt = new Date();
     }
 
 }
