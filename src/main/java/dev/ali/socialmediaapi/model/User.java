@@ -1,6 +1,7 @@
 package dev.ali.socialmediaapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -35,6 +37,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = Role.USER;
+        this.createdAt = new Date();
     }
 
 }
