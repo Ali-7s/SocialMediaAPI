@@ -16,7 +16,6 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
     private String content;
     private Date createdAt = new Date();
 
@@ -24,8 +23,7 @@ public class Post {
     @JoinColumn()
     private User user;
 
-    public Post(String title, String content, User user) {
-        this.title = title;
+    public Post( String content, User user) {
         this.content = content;
         this.user = user;
         this.createdAt = new Date();

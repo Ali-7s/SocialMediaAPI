@@ -4,6 +4,7 @@ import dev.ali.socialmediaapi.model.Post;
 import dev.ali.socialmediaapi.model.User;
 import dev.ali.socialmediaapi.repository.PostRepository;
 import dev.ali.socialmediaapi.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,12 +24,12 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public void addPost(String title, String content, User user) {
-        Optional<User> selectedUser = userRepository.findByEmail(user.getEmail());
+    public void addPost(String content, Authentication authentication) {
+        Optional<User> selectedUser = userRepository.findByEmail(authentication.getName());
 
         User actualUser = selectedUser.orElseThrow();
 
-        Post post = new Post(title, content, actualUser);
+        Post post = new Post(content, actualUser);
 
         postRepository.save(post);
     }

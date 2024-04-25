@@ -3,6 +3,7 @@ package dev.ali.socialmediaapi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
@@ -38,6 +40,10 @@ public class User {
         this.email = email;
         this.role = Role.USER;
         this.createdAt = new Date();
+    }
+
+    public String getRole() {
+        return role.toString();
     }
 
 }
