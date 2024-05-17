@@ -29,6 +29,7 @@ public class User {
     private String email;
     private Role role;
     private Date createdAt;
+    private String photoUrl;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
