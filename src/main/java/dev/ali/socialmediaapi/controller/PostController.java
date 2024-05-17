@@ -1,10 +1,17 @@
 package dev.ali.socialmediaapi.controller;
-
 import dev.ali.socialmediaapi.dto.CreatePostRequest;
-import dev.ali.socialmediaapi.model.Post;
+import dev.ali.socialmediaapi.model.ApiResponse;
 import dev.ali.socialmediaapi.service.PostService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
+import static dev.ali.socialmediaapi.utils.RequestUtils.getResponse;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/api/post")
@@ -17,28 +24,30 @@ public class PostController {
     }
 
     @GetMapping("all")
-    public Iterable<Post> getAllPosts() {
-        return postService.findAllPosts();
+    public ResponseEntity<ApiResponse> getAllPosts() {
+        return ResponseEntity.ok().body(getResponse(Map.of("posts", postService.findAllPosts()), "All posts successfully retrieved.", OK));
     }
 
     @GetMapping("search/{id}")
-    public Post findByPostById(@PathVariable Long id) {
-        return postService.findById(id);
+    public ResponseEntity<ApiResponse> findByPostById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(getResponse(Map.of("post", postService.findById(id)), "Post successfully retrieved.", OK));
     }
 
     @GetMapping("/user/search/{id}")
-    public Iterable<Post> findPostsByUserId(@PathVariable Long id) {
-        return postService.findByUserId(id);
+    public ResponseEntity<ApiResponse> findPostsByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok().body(getResponse(Map.of("posts", postService.findByUserId(id)), "All posts by user id successfully retrieved.", OK));
+
     }
 
     @PostMapping("/add")
-    public void createPost(@RequestBody CreatePostRequest postRequest, Authentication authentication) {
-        postService.addPost(postRequest.content(), authentication);
+    public ResponseEntity<ApiResponse> createPost(@RequestBody CreatePostRequest postRequest, Authentication authentication) {
+        return ResponseEntity.created(URI.create("")).body(getResponse(Map.of("post", postService.addPost(postRequest.content(), authentication)), "Post successfully created.", CREATED));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deletePost(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
+        return ResponseEntity.ok().body(getResponse(Collections.emptyMap(), "Post successfully deleted.", NO_CONTENT));
     }
 
 }
