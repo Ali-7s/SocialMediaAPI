@@ -24,14 +24,11 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public void addPost(String content, Authentication authentication) {
+    public Post addPost(String content, Authentication authentication) {
         Optional<User> selectedUser = userRepository.findByEmail(authentication.getName());
-
         User actualUser = selectedUser.orElseThrow();
-
         Post post = new Post(content, actualUser);
-
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
     public void deletePost(Long id) {
@@ -49,7 +46,6 @@ public class PostService {
     public Iterable<Post> findByUserId(Long userId) {
         return postRepository.findByUserId(userId);
     }
-
 
     public void addPost(Post post) {
         postRepository.save(post);
