@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,7 +17,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private Date createdAt = new Date();
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
@@ -26,7 +26,7 @@ public class Post {
     public Post( String content, User user) {
         this.content = content;
         this.user = user;
-        this.createdAt = new Date();
+        this.createdAt = LocalDateTime.now();
     }
 
 }
