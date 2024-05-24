@@ -1,5 +1,6 @@
 package dev.ali.socialmediaapi.controller;
 import dev.ali.socialmediaapi.dto.CreatePostRequest;
+import dev.ali.socialmediaapi.dto.UpdatePostRequest;
 import dev.ali.socialmediaapi.model.ApiResponse;
 import dev.ali.socialmediaapi.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,10 @@ public class PostController {
     public ResponseEntity<ApiResponse> createPost(@RequestBody CreatePostRequest postRequest, Authentication authentication) {
         return ResponseEntity.created(URI.create("")).body(getResponse(Map.of("post", postService.addPost(postRequest.content(), authentication)), "Post successfully created.", CREATED));
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<ApiResponse> updatePost(@RequestBody UpdatePostRequest postRequest) {
+        return ResponseEntity.ok().body(getResponse(Map.of("post", postService.updatePost(postRequest.id(), postRequest.content())), "Post successfully updated.", OK));    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Long id) {

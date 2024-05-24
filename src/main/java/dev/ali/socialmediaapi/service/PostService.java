@@ -35,6 +35,13 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    public Post updatePost(Long id, String content) {
+        Optional<Post> foundPost = postRepository.findById(id);
+        Post actualPost = foundPost.orElseThrow();
+        actualPost.setContent(content);
+        return postRepository.save(actualPost);
+    }
+
     public Post findById(Long id) {
         return postRepository.findById(id).orElse(null);
     }
