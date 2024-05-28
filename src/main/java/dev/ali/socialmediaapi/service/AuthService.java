@@ -27,8 +27,8 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public void RegisterUser(String username, String email, String password) {
-        User user = new User(username, email, passwordEncoder.encode(password));
+    public void RegisterUser(String username, String displayName, String email, String password) {
+        User user = new User(username, displayName, email, passwordEncoder.encode(password));
         user.setPhotoUrl("https://i.ibb.co/VHZPVZ4/blank-profile-picture-973460-1920.png");
         userRepository.save(user);
     }
