@@ -23,6 +23,7 @@ public class User {
     private Long id;
     @Column(unique = true)
     private String username;
+    private String displayName;
     @JsonIgnore
     private String password;
     @Column(unique = true)
@@ -35,8 +36,9 @@ public class User {
     @JsonIgnore
     private List<Post> posts;
 
-    public User(String username, String email, String password) {
+    public User(String username, String displayName, String email, String password) {
         this.username = username;
+        this.displayName = displayName;
         this.password = password;
         this.email = email;
         this.role = Role.USER;
