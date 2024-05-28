@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public void registerUser(@RequestBody RegisterRequest registerRequest) {
-        authService.RegisterUser(registerRequest.username(), registerRequest.email(), registerRequest.password());
+        authService.RegisterUser(registerRequest.username(), registerRequest.displayName(), registerRequest.email(), registerRequest.password());
     }
 
     @PostMapping("/login")
