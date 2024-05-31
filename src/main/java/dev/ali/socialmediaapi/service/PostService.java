@@ -46,10 +46,6 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public void updatePost(Post post) {
-        postRepository.save(post);
-    }
-
     public Iterable<Post> findByUserId(Long userId) {
         return postRepository.findByUserId(userId);
     }
