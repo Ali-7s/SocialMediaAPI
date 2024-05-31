@@ -11,9 +11,8 @@ import java.util.Date;
 @Service
 public class JWTService {
 
-    private final Date jwtExpiration = new Date(System.currentTimeMillis() + 900000);
+    private final Date jwtExpiration = new Date(System.currentTimeMillis() + 610000000);
     private final SecretKey key = Jwts.SIG.HS256.key().build();
-
 
     public String getToken(String username) {
         return Jwts.builder().subject(username).expiration(jwtExpiration).signWith(key).compact();
