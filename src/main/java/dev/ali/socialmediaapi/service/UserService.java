@@ -42,9 +42,9 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(user.getUsername().toLowerCase());
         userRepository.save(user);
     }
 }
