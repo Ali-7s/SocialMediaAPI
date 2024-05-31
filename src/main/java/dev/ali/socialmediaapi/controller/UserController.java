@@ -26,21 +26,21 @@ public class UserController {
     @GetMapping("/authed-user")
     public ResponseEntity<ApiResponse> getAuthedUser(Authentication user) {
         Optional<User> foundUser = userService.findByEmail(user.getName());
-        return ResponseEntity.ok().body(getResponse(Map.of("user", foundUser), "Authenticated user retrieved", OK));
+        return new ResponseEntity<>(getResponse(Map.of("user", foundUser), "Authenticated user retrieved"), OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllUsers() {
-        return ResponseEntity.ok().body(getResponse(Map.of("users", userService.findAllUsers()), "All users successfully retrieved.", OK));
+        return new ResponseEntity<>(getResponse(Map.of("users", userService.findAllUsers()), "All users successfully retrieved."), OK);
     }
 
     @GetMapping("/search/{id}")
     public ResponseEntity<ApiResponse> findUserById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getResponse(Map.of("user", userService.findById(id)), "User successfully retrieved.", OK));
+        return new ResponseEntity<>(getResponse(Map.of("user", userService.findById(id)), "User successfully retrieved."), OK);
     }
 
     @GetMapping("/search/{username}")
     public ResponseEntity<ApiResponse> findByUsername(@PathVariable String username) {
-        return ResponseEntity.ok().body(getResponse(Map.of("user", userService.findByUsername(username)), "User successfully retrieved.", OK));
+        return new ResponseEntity<>(getResponse(Map.of("user", userService.findByUsername(username)), "User successfully retrieved."), OK);
     }
 }
