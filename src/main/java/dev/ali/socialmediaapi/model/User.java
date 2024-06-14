@@ -64,4 +64,15 @@ public class User {
         return role.toString();
     }
 
+    public void follow(User user) {
+        this.following.add(user);
+        user.getFollowers().add(this);
+
+    }
+
+    public void unfollow(User user) {
+        this.following.remove(user);
+        user.getFollowers().remove(this);
+    }
+
 }
