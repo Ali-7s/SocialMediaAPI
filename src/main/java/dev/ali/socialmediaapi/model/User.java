@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,6 +33,19 @@ public class User {
     private Role role;
     private Date createdAt;
     private String photoUrl;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+
+    @JoinTable(
+            name = "followers",
+            joinColumns = @JoinColumn(name = "following_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
+    @JsonIgnore
+    private Set<User> followers = new HashSet<>();
+    @ManyToMany(mappedBy = "followers", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<User> following = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
