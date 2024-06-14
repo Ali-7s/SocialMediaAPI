@@ -47,4 +47,30 @@ public class UserService {
         user.setUsername(user.getUsername().toLowerCase());
         userRepository.save(user);
     }
+
+    @Transactional
+    public void followUser(Long followerId, Long followingId) {
+        User followerUser = findById(followerId).orElseThrow();
+        User followingUser = findById(followingId).orElseThrow();
+        followerUser.follow(followingUser);
+        userRepository.save(followerUser);
+    }
+
+    @Transactional
+    public void unfollowUser(Long followerId, Long followingId) {
+        User followerUser = findById(followerId).orElseThrow();
+        User followingUser = findById(followingId).orElseThrow();
+        followerUser.unfollow(followingUser);
+        userRepository.save(followerUser);
+    }
+
+    public Set<User> getFollowers(Long id) {
+        User user = findById(id).orElseThrow();
+        return user.getFollowers();
+    }
+
+    public Set<User> getFollowing(Long id) {
+        User user = findById(id).orElseThrow();
+        return user.getFollowing();
+    }
 }
