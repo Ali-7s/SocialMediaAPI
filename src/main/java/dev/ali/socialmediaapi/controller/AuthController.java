@@ -5,11 +5,9 @@ import dev.ali.socialmediaapi.dto.RegisterRequest;
 import dev.ali.socialmediaapi.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,13 +21,22 @@ public class AuthController {
 
     @PostMapping("/register")
     public void registerUser(@Validated @RequestBody RegisterRequest registerRequest) {
-        authService.RegisterUser(registerRequest.username(), registerRequest.displayName(), registerRequest.email(), registerRequest.password());
+        authService.registerUser(registerRequest.username(), registerRequest.displayName(), registerRequest.email(), registerRequest.password());
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-        log.info("{} {}", loginRequest.email(), loginRequest.password());
-        return authService.LoginUser(loginRequest.email(), loginRequest.password());
+        return authService.loginUser(loginRequest.email(), loginRequest.password());
+    }
+
+    @GetMapping("/refresh/{id}")
+    public ResponseEntity<?> refreshAccessToken(@PathVariable Long id) {
+        return authService.refreshAccessToken(id);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(Authentication authentication) {
+        return authService.logout(authentication.getName());
     }
 
 }

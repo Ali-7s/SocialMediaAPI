@@ -1,7 +1,6 @@
 package dev.ali.socialmediaapi.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,28 +17,33 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final UserDetailsManager userDetailsManager;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomAuthenticationProvider( @Lazy UserDetailsManager userDetailsManager, @Lazy PasswordEncoder passwordEncoder) {
+    public CustomAuthenticationProvider(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder) {
         this.userDetailsManager = userDetailsManager;
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
-        UserDetails u = userDetailsManager.loadUserByUsername(username);
+        String rawPassword = authentication.getCredentials().toString();
 
-        if(passwordEncoder.matches(password, u.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(username, password, u.getAuthorities());
-        } else {
-            throw new BadCredentialsException("Incorrect credentials.");
+        try {
+            UserDetails user = userDetailsManager.loadUserByUsername(username);
+            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+                
+                return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            } else {
+                log.warn("Authentication failed for user '{}': Incorrect password.", username);
+                throw new BadCredentialsException("Incorrect credentials.");
+            }
+        } catch (AuthenticationException ex) {
+            log.warn("Authentication failed for user '{}': {}", username, ex.getMessage());
+            throw ex;
         }
-
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

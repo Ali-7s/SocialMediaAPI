@@ -1,37 +1,76 @@
 package dev.ali.socialmediaapi.service;
 
-import io.jsonwebtoken.Jwts;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.JWTVerifier;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 
+
 @Service
+@Slf4j
 public class JWTService {
 
-    private final Date jwtExpiration = new Date(System.currentTimeMillis() + 610000000);
-    private final SecretKey key = Jwts.SIG.HS256.key().build();
+    private final Algorithm accessTokenAlgorithm;
+    private final Algorithm refreshTokenAlgorithm;
+    private static final long ACCESS_TOKEN_EXPIRATION_MS = 300000;
+    private static final long REFRESH_TOKEN_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-    public String getToken(String username) {
-        return Jwts.builder().subject(username).expiration(jwtExpiration).signWith(key).compact();
+
+    public JWTService(@Value("${jwt.access.secret}") String accessSecret,
+                      @Value("${jwt.refresh.secret}") String refreshSecret) {
+        this.accessTokenAlgorithm = Algorithm.HMAC256(accessSecret.getBytes());
+        this.refreshTokenAlgorithm = Algorithm.HMAC256(refreshSecret.getBytes());
     }
 
-    public String getAuthUser(HttpServletRequest request) {
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+    public String generateAccessToken(String username) {
+        return JWT.create()
+                .withSubject(username)
+                .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_MS))
+                .sign(accessTokenAlgorithm);
+    }
 
-        if(!(token.isEmpty() || token.isBlank())) {
-            String PREFIX = "Bearer";
+    public String generateRefreshToken(String username) {
 
-            return Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(token.replace(PREFIX, "").trim())
-                    .getPayload().getSubject();
+        return JWT.create()
+                .withSubject(username)
+                .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_MS))
+                .sign(refreshTokenAlgorithm);
+    }
+
+    public boolean validateRefreshToken(String email, String token) {
+        JWTVerifier verifier = getJWTVerifier(refreshTokenAlgorithm);
+        return StringUtils.isNotEmpty(email) && isTokenExpired(verifier, token);
+    }
+
+    public boolean validateAccessToken(String email, String token) {
+        JWTVerifier verifier = getJWTVerifier(accessTokenAlgorithm);
+        return StringUtils.isNotEmpty(email) && isTokenExpired(verifier, token);
+    }
+
+    public String getSubject(String token) {
+        return JWT.decode(token).getSubject();
+    }
+
+    private boolean isTokenExpired(JWTVerifier verifier, String token) {
+        Date expiration = verifier.verify(token).getExpiresAt();
+        return !expiration.before(new Date());
+    }
+
+    private JWTVerifier getJWTVerifier(Algorithm alg) {
+        JWTVerifier verifier;
+        try {
+            verifier = JWT.require(alg).build();
+        } catch (JWTVerificationException exception)  {
+            throw new JWTVerificationException("JWT verification failed", exception);
         }
-        return null;
+        return verifier;
     }
-
-
 }
+
+
