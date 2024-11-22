@@ -14,7 +14,7 @@
     <name>SocialMediaAPI</name>
     <description>SocialMediaAPI</description>
     <properties>
-        <java.version>21</java.version>
+        <release>17</release>
         <aws.java.sdk.version>2.27.7</aws.java.sdk.version>
     </properties>
     <dependencyManagement>
