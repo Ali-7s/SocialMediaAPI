@@ -1,4 +1,5 @@
 package dev.ali.socialmediaapi.controller;
+
 import dev.ali.socialmediaapi.dto.CreatePostRequest;
 import dev.ali.socialmediaapi.dto.PostDTO;
 import dev.ali.socialmediaapi.dto.UpdatePostRequest;
@@ -11,9 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import static dev.ali.socialmediaapi.utils.RequestUtils.getResponse;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -32,7 +35,7 @@ public class PostController {
     @GetMapping()
     public ResponseEntity<ApiResponse> getAll(@RequestParam(value = "page", defaultValue = "1") int page) {
         Page<PostDTO> posts = postService.getPosts(page);
-        
+
         return new ResponseEntity<>(getResponse(Map.of("posts", posts), "All posts successfully retrieved."), HttpStatus.OK);
     }
 
@@ -44,7 +47,7 @@ public class PostController {
     }
 
     @GetMapping("/user/following")
-    public ResponseEntity<ApiResponse> getPostsByUsersFollowing( @RequestParam(value = "page", defaultValue = "1") int page, Authentication authentication) {
+    public ResponseEntity<ApiResponse> getPostsByUsersFollowing(@RequestParam(value = "page", defaultValue = "1") int page, Authentication authentication) {
         Page<PostDTO> posts = postService.findAllByUserFollowing(authentication, page);
         return new ResponseEntity<>(getResponse(Map.of("posts", posts), "All posts by user successfully retrieved."), HttpStatus.OK);
     }
@@ -82,7 +85,7 @@ public class PostController {
     }
 
     @GetMapping("/likes")
-    public ResponseEntity<ApiResponse> getLikedPost(Authentication authentication, @RequestParam(value = "page", defaultValue = "1") int page ) {
+    public ResponseEntity<ApiResponse> getLikedPost(Authentication authentication, @RequestParam(value = "page", defaultValue = "1") int page) {
         Page<PostDTO> posts = postService.getLikedPosts(authentication.getName(), page);
         return new ResponseEntity<>(getResponse(Map.of("posts", posts), "Post successfully retrieved."), OK);
     }

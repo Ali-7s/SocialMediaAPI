@@ -1,7 +1,10 @@
 package dev.ali.socialmediaapi.dto;
 
 import dev.ali.socialmediaapi.model.Role;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;

@@ -7,9 +7,9 @@ import dev.ali.socialmediaapi.model.User;
 import dev.ali.socialmediaapi.repository.PostRepository;
 import dev.ali.socialmediaapi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,7 +40,7 @@ public class PostService {
         return postRepository.findAll(PageRequest.of(page, 5, Sort.by("createdAt").descending())).map(postMapper::toPostDTO);
     }
 
-//    @Cacheable(value = "userPosts", key = "#userId")
+    //    @Cacheable(value = "userPosts", key = "#userId")
     public Page<PostDTO> findPostsByUserId(Long userId, int page) {
         return postRepository.findAllByUserId(userId, PageRequest.of(page, 5, Sort.by("createdAt").descending())).map(postMapper::toPostDTO);
 
@@ -54,7 +54,7 @@ public class PostService {
 
     public Page<PostDTO> getLikedPosts(String email, int page) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        
+
         return postRepository.findAllByPostIds(user.getLikedPosts().stream().toList(), PageRequest.of(page, 5, Sort.by("createdAt").descending())).map(postMapper::toPostDTO);
     }
 
@@ -96,7 +96,6 @@ public class PostService {
     }
 
 
-
     public void likePost(Long id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         Post post = postRepository.findById(id).orElseThrow();
@@ -114,8 +113,6 @@ public class PostService {
         post.getUsersLikedIds().remove(user.getId());
         postRepository.save(post);
     }
-
-
 
 
 }

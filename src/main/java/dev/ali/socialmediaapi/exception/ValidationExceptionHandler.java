@@ -27,21 +27,21 @@ public class ValidationExceptionHandler {
     public ResponseEntity<ApiResponse> handleValidationExceptions(Exception exception) {
         List<ValidationExceptionResponse> exceptionsList = new ArrayList<>();
 
-        if(exception instanceof MethodArgumentNotValidException methodArgumentNotValidException) {
-            for(FieldError error : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
+        if (exception instanceof MethodArgumentNotValidException methodArgumentNotValidException) {
+            for (FieldError error : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
                 ValidationExceptionResponse validationError = new ValidationExceptionResponse(error.getField(), error.getDefaultMessage());
                 exceptionsList.add(validationError);
             }
         }
 
-        if(exception instanceof DataIntegrityViolationException integrityViolationException) {
-                if(Objects.requireNonNull(integrityViolationException.getRootCause()).getMessage().contains("email")) {
-                    ValidationExceptionResponse validationError = new ValidationExceptionResponse("email", "Email already exists. Please try again or login to your existing account");
-                    exceptionsList.add(validationError);
-                } else if(integrityViolationException.getRootCause().getMessage().contains("username")) {
-                    ValidationExceptionResponse validationError = new ValidationExceptionResponse("username", "Username already exists. Please try again or login to your existing account");
-                    exceptionsList.add(validationError);
-                }
+        if (exception instanceof DataIntegrityViolationException integrityViolationException) {
+            if (Objects.requireNonNull(integrityViolationException.getRootCause()).getMessage().contains("email")) {
+                ValidationExceptionResponse validationError = new ValidationExceptionResponse("email", "Email already exists. Please try again or login to your existing account");
+                exceptionsList.add(validationError);
+            } else if (integrityViolationException.getRootCause().getMessage().contains("username")) {
+                ValidationExceptionResponse validationError = new ValidationExceptionResponse("username", "Username already exists. Please try again or login to your existing account");
+                exceptionsList.add(validationError);
+            }
         }
 
         return new ResponseEntity<>(getResponse(Map.of("errors", exceptionsList), EMPTY), BAD_REQUEST);

@@ -80,7 +80,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
                     Object simpUser = accessor.getHeader("simpUser");
                     assert simpUser != null;
-                    
+
 
                     String token = accessor.getFirstNativeHeader("Authorization");
 
@@ -95,8 +95,8 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
                                     user, null, user.getAuthorities());
 
                             accessor.setUser(authentication);
-                            
-                            
+
+
                         } catch (Exception e) {
                             System.err.println("WebSocket authentication failed: " + e.getMessage());
                         }
@@ -108,9 +108,6 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
         });
     }
-
-
-
 
 
 }

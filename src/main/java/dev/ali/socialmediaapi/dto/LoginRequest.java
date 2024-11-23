@@ -1,4 +1,4 @@
 package dev.ali.socialmediaapi.dto;
 
-public record LoginRequest (String email, String password) {
+public record LoginRequest(String email, String password) {
 }

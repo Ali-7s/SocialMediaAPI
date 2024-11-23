@@ -72,10 +72,6 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
     public void addUser(User user) {
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Password cannot be empty");
@@ -128,7 +124,7 @@ public class UserService {
     public void uploadPhoto(Long id, MultipartFile file) {
         String filename = id + "/user_profile" + getFileExtension(file.getOriginalFilename());
         try {
-            
+
             s3Service.uploadFile(filename, file);
         } catch (Exception e) {
             throw new RuntimeException("Unable to save image", e);

@@ -66,7 +66,7 @@ public class JWTService {
         JWTVerifier verifier;
         try {
             verifier = JWT.require(alg).build();
-        } catch (JWTVerificationException exception)  {
+        } catch (JWTVerificationException exception) {
             throw new JWTVerificationException("JWT verification failed", exception);
         }
         return verifier;

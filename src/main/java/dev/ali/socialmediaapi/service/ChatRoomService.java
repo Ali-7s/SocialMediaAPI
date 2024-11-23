@@ -19,7 +19,7 @@ public class ChatRoomService {
                 .map(ChatRoom::getChatId)
                 .orElseGet(() -> {
                     String chatId = String.format("%s_%s", senderId, recipientId);
-                    
+
 
                     ChatRoom senderRecipient = ChatRoom.builder()
                             .chatId(chatId)
@@ -33,8 +33,6 @@ public class ChatRoomService {
                             .recipientId(senderId)
                             .build();
 
-                    
-                    
 
                     chatRoomRepository.save(senderRecipient);
                     chatRoomRepository.save(recipientSender);

@@ -40,9 +40,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        
 
-        if(token != null && token.startsWith(TOKEN_PREFIX)) {
+
+        if (token != null && token.startsWith(TOKEN_PREFIX)) {
             token = token.replace(TOKEN_PREFIX, "");
         }
 

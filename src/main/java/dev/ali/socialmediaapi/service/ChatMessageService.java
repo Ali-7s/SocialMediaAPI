@@ -9,19 +9,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ChatMessageService {
     private final ChatMessageRepository repository;
-    private final ChatRoomService chatRoomService;
     private final UserService userService;
 
 
     public List<ConversationDTO> findAllConversationsWithLastMessage(Long userId) {
-        
+
 
         List<ChatMessage> messages = repository.findConversationsByUserId(userId);
 
@@ -56,8 +58,6 @@ public class ChatMessageService {
 
         return repository.findChatMessagesByRecipientIdAndSenderId(senderId, recipientId);
     }
-
-
 
 
 }

@@ -14,7 +14,10 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
@@ -25,14 +28,14 @@ import java.util.List;
 @RequestMapping("api/chat")
 public class ChatController {
 
-   private final SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageService chatMessageService;
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
 
     @GetMapping("/conversations/{userId}")
     public ResponseEntity<List<ConversationDTO>> findAllConversationsWithLastMessage(@PathVariable Long userId) {
-        
+
         List<ConversationDTO> conversations = chatMessageService.findAllConversationsWithLastMessage(userId);
         return ResponseEntity.ok(conversations);
     }
@@ -44,16 +47,13 @@ public class ChatController {
             @Header("simpSessionId") String sessionId,
             Principal user) {
 
-        
-        
-        
 
         String chatId = chatRoomService
                 .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId());
-        
+
 
         chatMessage.setChatId(chatId);
-        
+
 
         ChatMessage saved = chatMessageService.save(chatMessage);
 
@@ -67,16 +67,13 @@ public class ChatController {
                 headerAccessor.getMessageHeaders()
         );
 
-        
+
     }
 
 
-
-
-
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages ( @PathVariable Long senderId,
-                                                @PathVariable Long recipientId) {
+    public ResponseEntity<?> findChatMessages(@PathVariable Long senderId,
+                                              @PathVariable Long recipientId) {
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
