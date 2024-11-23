@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
 import java.util.List;
 
 @Configuration
@@ -27,7 +28,6 @@ public class SecurityConfig {
 
         this.jwtAuthFilter = jwtAuthFilter;
     }
-
 
 
     @Bean
@@ -61,7 +61,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 
 }

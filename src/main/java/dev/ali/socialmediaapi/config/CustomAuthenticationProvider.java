@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         try {
             UserDetails user = userDetailsManager.loadUserByUsername(username);
             if (passwordEncoder.matches(rawPassword, user.getPassword())) {
-                
+
                 return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             } else {
                 log.warn("Authentication failed for user '{}': Incorrect password.", username);

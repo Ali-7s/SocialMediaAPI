@@ -16,7 +16,6 @@ public abstract class PostMapper {
     protected UserService userService;
 
 
-
     @Mapping(target = "user", qualifiedByName = "toUserSummaryDTO")
     public abstract PostDTO toPostDTO(Post post);
 

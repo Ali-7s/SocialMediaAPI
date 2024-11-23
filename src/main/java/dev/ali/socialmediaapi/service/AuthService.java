@@ -12,9 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 @Slf4j
 public class AuthService {
@@ -36,7 +33,7 @@ public class AuthService {
     }
 
     public ResponseEntity<?> loginUser(String email, String password) {
-        
+
         UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(email, password);
         Authentication auth = authenticationProvider.authenticate(credentials);
 
@@ -44,7 +41,7 @@ public class AuthService {
         if (auth.isAuthenticated()) {
             String accessToken = jwtService.generateAccessToken(auth.getName());
             String refreshToken = jwtService.generateRefreshToken(auth.getName());
-            
+
             userService.storeRefreshToken(auth.getName(), refreshToken);
 
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken).header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization").build();
@@ -55,7 +52,7 @@ public class AuthService {
 
     public ResponseEntity<?> refreshAccessToken(Long id) {
         User user = userService.findUserById(id).orElseThrow();
-        if(jwtService.validateRefreshToken(user.getEmail(), user.getRefreshToken())) {
+        if (jwtService.validateRefreshToken(user.getEmail(), user.getRefreshToken())) {
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateAccessToken(user.getEmail())).header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization").build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
@@ -73,8 +70,5 @@ public class AuthService {
         return SecurityContextHolder.getContext().getAuthentication();
 
     }
-
-
-
 
 }

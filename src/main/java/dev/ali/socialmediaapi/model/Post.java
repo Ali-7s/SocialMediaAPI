@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class Post {
     @ElementCollection
     private Set<Long> usersLikedIds;
 
-    public Post( String content, User user) {
+    public Post(String content, User user) {
         this.content = content;
         this.user = user;
         this.createdAt = LocalDateTime.now();

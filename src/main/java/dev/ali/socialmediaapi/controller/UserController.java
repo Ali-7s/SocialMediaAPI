@@ -39,7 +39,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<UserProfileDTO> users = userService.findAllUsers();
-        
+
         return new ResponseEntity<>(getResponse(Map.of("users", users), "All users successfully retrieved."), HttpStatus.OK);
     }
 

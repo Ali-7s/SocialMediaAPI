@@ -37,7 +37,8 @@ public class S3Config {
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .region(Region.of("auto"))
                 .serviceConfiguration(serviceConfiguration)
-                .build();    }
+                .build();
+    }
 
     @Bean
     public S3Presigner buildS3Presigner(S3Config config) {
@@ -55,7 +56,6 @@ public class S3Config {
                         .build())
                 .build();
     }
-
 
 
 }
