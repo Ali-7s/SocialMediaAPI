@@ -1,6 +1,7 @@
 package dev.ali.socialmediaapi.config;
 
 import dev.ali.socialmediaapi.filter.JWTAuthFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,6 +19,8 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private final JWTAuthFilter jwtAuthFilter;
+    @Value("${environment.PROD_URL}")
+    private String prodOrigin;
 
     public SecurityConfig(AuthenticationProvider authenticationProvider, JWTAuthFilter jwtAuthFilter) {
         this.authenticationProvider = authenticationProvider;
@@ -35,7 +38,7 @@ public class SecurityConfig {
             CorsConfigurationSource source = request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(
-                        List.of("http://localhost:5173"));
+                        List.of("http://localhost:5173", prodOrigin));
                 config.setAllowedMethods(
                         List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                 config.setAllowedHeaders(List.of("*"));
