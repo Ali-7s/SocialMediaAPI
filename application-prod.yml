@@ -25,5 +25,7 @@ jwt:
     secret: ${JWT_ACCESS_SECRET}
   refresh:
     secret: ${JWT_REFRESH_SECRET}
+server:
+  port: ${PORT:8080}
 
 
