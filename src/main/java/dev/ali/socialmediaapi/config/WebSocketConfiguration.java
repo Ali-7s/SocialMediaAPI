@@ -3,6 +3,7 @@ package dev.ali.socialmediaapi.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.ali.socialmediaapi.service.JWTService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -35,7 +36,8 @@ import java.util.List;
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
     private final JWTService jwtService;
     private final UserDetailsManager userDetailsManager;
-
+    @Value("${environment.PROD_URL}")
+    private String prodOrigin;
     public WebSocketConfiguration(JWTService jwtService, UserDetailsManager userDetailsManager) {
         this.jwtService = jwtService;
         this.userDetailsManager = userDetailsManager;
@@ -50,7 +52,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173").withSockJS();
+        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173", prodOrigin).withSockJS();
     }
 
     @Override
